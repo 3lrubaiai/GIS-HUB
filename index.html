@@ -1,0 +1,1401 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عرض سعر - خدمات التسويق الرقمي | GIS HUB</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <style>
+
+    /* ========================================
+       CSS VARIABLES & RESET
+    ======================================== */
+    :root {
+        --dark-bg:       #08111f;
+        --dark-card:     #101e33;
+        --dark-card2:    #0d1a2e;
+        --dark-border:   rgba(201,168,76,0.15);
+        --dark-border-s: rgba(201,168,76,0.38);
+        --gold:          #c9a84c;
+        --gold-l:        #e8c96e;
+        --gold-d:        #a07a28;
+        --gold-grad:     linear-gradient(135deg,#c9a84c,#f0d780,#c9a84c);
+        --text-p:        #f0e8d5;
+        --text-s:        #9aadcc;
+        --text-m:        #5a7090;
+        --blue:          #1a4a8a;
+        --font:          'Cairo','Tajawal',sans-serif;
+        --r-sm:  8px;
+        --r-md:  14px;
+        --r-lg:  20px;
+        --r-xl:  28px;
+        --tr:    all 0.35s cubic-bezier(.4,0,.2,1);
+    }
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+        font-family:var(--font);
+        background:#060e1a;
+        color:var(--text-p);
+        direction:rtl;
+        text-align:right;
+        line-height:1.7;
+        overflow-x:hidden;
+        -webkit-font-smoothing:antialiased;
+    }
+    a{text-decoration:none;color:inherit;}
+    strong{color:var(--gold-l);font-weight:700;}
+    ::-webkit-scrollbar{width:5px;}
+    ::-webkit-scrollbar-track{background:var(--dark-bg);}
+    ::-webkit-scrollbar-thumb{background:var(--gold-d);border-radius:3px;}
+
+    /* ========================================
+       SCROLL PROGRESS
+    ======================================== */
+    #scroll-progress{
+        position:fixed;top:0;left:0;height:3px;width:0%;
+        background:var(--gold-grad);z-index:9999;
+        box-shadow:0 0 8px rgba(201,168,76,.6);
+        transition:width .08s linear;
+    }
+
+    /* ========================================
+       PAGE WRAPPER & REVEAL
+    ======================================== */
+    .page{
+        min-height:100vh;
+        position:relative;
+        overflow:hidden;
+        display:flex;
+        flex-direction:column;
+    }
+
+    .reveal{opacity:0;transform:translateY(36px);transition:opacity .65s ease,transform .65s ease;}
+    .reveal.vis{opacity:1;transform:translateY(0);}
+
+    /* ========================================
+       SHARED GOLD LINE
+    ======================================== */
+    .gold-line{
+        height:1px;
+        background:linear-gradient(90deg,transparent,var(--gold),var(--gold-l),var(--gold),transparent);
+    }
+    .gold-line-v{
+        width:2px;
+        background:linear-gradient(180deg,transparent,var(--gold),var(--gold-l),var(--gold),transparent);
+    }
+
+    /* ========================================
+       PAGE NUMBERS NAV
+    ======================================== */
+    .page-nav{
+        position:fixed;
+        left:24px;
+        top:50%;
+        transform:translateY(-50%);
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        z-index:200;
+    }
+    .page-nav-dot{
+        width:10px;height:10px;
+        border-radius:50%;
+        border:1.5px solid rgba(201,168,76,.35);
+        background:transparent;
+        cursor:pointer;
+        transition:var(--tr);
+    }
+    .page-nav-dot.active{
+        background:var(--gold);
+        border-color:var(--gold);
+        box-shadow:0 0 10px rgba(201,168,76,.5);
+    }
+    .page-nav-dot:hover{border-color:var(--gold);background:rgba(201,168,76,.3);}
+
+
+    /* =====================================================
+       PAGE 1 — COVER
+    ===================================================== */
+    #page1{
+        background:
+            radial-gradient(ellipse at 25% 20%, rgba(26,74,138,.45) 0%,transparent 55%),
+            radial-gradient(ellipse at 75% 80%, rgba(201,168,76,.1) 0%,transparent 50%),
+            linear-gradient(170deg,#050c18 0%,#08111f 55%,#0a1525 100%);
+        justify-content:space-between;
+    }
+
+    /* BG GRID */
+    #page1::before{
+        content:'';
+        position:absolute;inset:0;
+        background-image:
+            linear-gradient(rgba(201,168,76,.03) 1px,transparent 1px),
+            linear-gradient(90deg,rgba(201,168,76,.03) 1px,transparent 1px);
+        background-size:60px 60px;
+        pointer-events:none;
+    }
+
+    /* TOP BAR */
+    .cover-topbar{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        padding:28px 48px;
+        position:relative;
+        z-index:2;
+    }
+    .cover-brand{
+        display:flex;align-items:center;gap:14px;
+    }
+    .cover-logo-ring{
+        width:50px;height:50px;border-radius:50%;
+        background:linear-gradient(135deg,rgba(201,168,76,.18),rgba(201,168,76,.05));
+        border:1px solid rgba(201,168,76,.35);
+        display:flex;align-items:center;justify-content:center;
+        font-size:14px;font-weight:900;color:var(--gold);letter-spacing:1px;
+        position:relative;
+    }
+    .cover-logo-ring::after{
+        content:'';
+        position:absolute;inset:-5px;border-radius:50%;
+        border:1px dashed rgba(201,168,76,.2);
+        animation:spin 15s linear infinite;
+    }
+    @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+    .cover-brand-text{display:flex;flex-direction:column;text-align:right;}
+    .cover-brand-name{font-size:16px;font-weight:800;color:var(--text-p);}
+    .cover-brand-sub{font-size:11px;color:var(--text-m);letter-spacing:1px;}
+
+    .cover-doc-info{text-align:left;display:flex;flex-direction:column;gap:3px;}
+    .cover-doc-ref{font-size:11px;color:var(--gold);letter-spacing:2px;font-weight:700;}
+    .cover-doc-date{font-size:11px;color:var(--text-m);}
+
+    /* HERO BODY */
+    .cover-body{
+        flex:1;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        text-align:center;
+        padding:0 40px;
+        position:relative;
+        z-index:2;
+        gap:28px;
+    }
+
+    .cover-badge{
+        display:inline-flex;align-items:center;gap:10px;
+        background:rgba(201,168,76,.08);
+        border:1px solid var(--dark-border-s);
+        padding:7px 22px;border-radius:30px;
+        font-size:12px;color:var(--gold-l);
+        letter-spacing:1.5px;font-weight:600;
+    }
+    .badge-pulse{
+        width:8px;height:8px;background:var(--gold);
+        border-radius:50%;animation:pdot 2s infinite;
+    }
+    @keyframes pdot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}
+
+    .cover-center-logo{
+        position:relative;
+        width:140px;height:140px;
+        display:flex;align-items:center;justify-content:center;
+    }
+    .ccl-outer{
+        position:absolute;inset:0;border-radius:50%;
+        border:1px solid rgba(201,168,76,.2);
+        animation:spin 20s linear infinite reverse;
+    }
+    .ccl-mid{
+        position:absolute;inset:10px;border-radius:50%;
+        border:1px dashed rgba(201,168,76,.15);
+        animation:spin 12s linear infinite;
+    }
+    .ccl-inner{
+        width:100px;height:100px;border-radius:50%;
+        background:linear-gradient(135deg,rgba(201,168,76,.18),rgba(26,74,138,.25));
+        border:1.5px solid rgba(201,168,76,.4);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;
+        gap:2px;
+        box-shadow:0 0 40px rgba(201,168,76,.15),inset 0 0 20px rgba(201,168,76,.06);
+        position:relative;z-index:1;
+    }
+    .ccl-icon{font-size:28px;color:var(--gold);}
+    .ccl-sub{font-size:9px;color:var(--text-m);letter-spacing:2px;text-transform:uppercase;}
+
+    .cover-headline{
+        display:flex;flex-direction:column;gap:6px;
+    }
+    .ch-eyebrow{
+        font-size:12px;letter-spacing:5px;color:var(--text-s);font-weight:400;
+        text-transform:uppercase;
+    }
+    .ch-main{
+        font-size:clamp(40px,7vw,72px);
+        font-weight:900;line-height:1.05;
+        background:var(--gold-grad);
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+        background-clip:text;
+        filter:drop-shadow(0 0 25px rgba(201,168,76,.35));
+    }
+    .ch-sub{
+        font-size:clamp(16px,2.5vw,22px);
+        color:var(--text-s);font-weight:400;
+    }
+
+    .cover-client-box{
+        background:rgba(201,168,76,.07);
+        border:1px solid var(--dark-border-s);
+        border-radius:var(--r-lg);
+        padding:20px 40px;
+        display:flex;align-items:center;gap:20px;
+    }
+    .ccb-label{font-size:11px;color:var(--text-m);letter-spacing:2px;font-weight:700;}
+    .ccb-name{font-size:22px;font-weight:900;color:var(--text-p);}
+    .ccb-divider{
+        width:1px;height:50px;
+        background:linear-gradient(180deg,transparent,var(--dark-border-s),transparent);
+    }
+    .ccb-right{display:flex;flex-direction:column;gap:2px;}
+    .ccb-type{
+        font-size:11px;color:var(--gold);
+        background:rgba(201,168,76,.1);
+        border:1px solid rgba(201,168,76,.25);
+        padding:3px 12px;border-radius:20px;
+        font-weight:700;letter-spacing:1px;
+        display:inline-block;
+    }
+
+    .cover-meta-row{
+        display:flex;align-items:center;gap:24px;
+        flex-wrap:wrap;justify-content:center;
+        font-size:13px;color:var(--text-s);
+    }
+    .cmr-item{display:flex;align-items:center;gap:8px;}
+    .cmr-item i{color:var(--gold);font-size:12px;}
+    .cmr-sep{color:var(--dark-border-s);opacity:.6;}
+
+    /* BOTTOM BAR */
+    .cover-bottom{
+        position:relative;z-index:2;
+        padding:22px 48px;
+        display:flex;align-items:center;justify-content:space-between;
+    }
+    .cb-page-label{
+        font-size:11px;color:var(--text-m);
+        letter-spacing:3px;
+    }
+    .cb-scroll{
+        display:flex;flex-direction:column;align-items:center;gap:6px;
+        color:var(--text-m);font-size:11px;letter-spacing:2px;
+    }
+    .cb-arrow{
+        width:32px;height:32px;border-radius:50%;
+        border:1px solid var(--dark-border);
+        display:flex;align-items:center;justify-content:center;
+        color:var(--gold);font-size:11px;
+        animation:bounce 2s ease-in-out infinite;
+    }
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+
+
+    /* =====================================================
+       PAGE 2 — SERVICES DETAILS
+    ===================================================== */
+    #page2{
+        background:linear-gradient(180deg,#0a1525 0%,#08111f 50%,#0a1525 100%);
+        padding:70px 0 60px;
+    }
+    #page2::before{
+        content:'';position:absolute;inset:0;
+        background:
+            radial-gradient(circle at 15% 30%,rgba(26,74,138,.12) 0%,transparent 45%),
+            radial-gradient(circle at 85% 70%,rgba(201,168,76,.07) 0%,transparent 45%);
+        pointer-events:none;
+    }
+
+    .p2-container{
+        max-width:1040px;margin:0 auto;padding:0 36px;
+        position:relative;z-index:1;
+    }
+
+    /* SECTION LABEL */
+    .sec-label{
+        display:flex;align-items:center;gap:14px;
+        margin-bottom:48px;
+        text-align:center;flex-direction:column;
+    }
+    .sec-num{
+        font-size:11px;font-weight:800;letter-spacing:4px;
+        color:var(--gold);background:rgba(201,168,76,.1);
+        border:1px solid var(--dark-border-s);
+        padding:4px 18px;border-radius:20px;
+    }
+    .sec-title{
+        font-size:clamp(24px,4vw,38px);font-weight:800;
+        color:var(--text-p);
+    }
+    .sec-line{
+        width:50px;height:3px;
+        background:var(--gold-grad);border-radius:2px;
+    }
+    .sec-desc{font-size:14px;color:var(--text-s);max-width:480px;}
+
+    /* SERVICE CARDS GRID */
+    .services-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+        gap:24px;
+        margin-bottom:40px;
+    }
+
+    .svc-card{
+        background:var(--dark-card);
+        border:1px solid var(--dark-border);
+        border-radius:var(--r-xl);
+        overflow:hidden;
+        transition:var(--tr);
+        position:relative;
+    }
+    .svc-card::before{
+        content:'';
+        position:absolute;top:0;left:0;right:0;height:3px;
+        background:var(--gold-grad);
+        transform:scaleX(0);transform-origin:right;
+        transition:transform .4s ease;
+    }
+    .svc-card:hover{
+        border-color:var(--dark-border-s);
+        transform:translateY(-6px);
+        box-shadow:0 16px 50px rgba(0,0,0,.4),0 0 25px rgba(201,168,76,.1);
+    }
+    .svc-card:hover::before{transform:scaleX(1);}
+
+    /* featured card */
+    .svc-card.featured{
+        border-color:rgba(201,168,76,.28);
+        background:linear-gradient(160deg,#111f35 0%,#101e33 100%);
+    }
+
+    .svc-card-head{
+        padding:26px 26px 20px;
+        border-bottom:1px solid var(--dark-border);
+        display:flex;align-items:center;gap:16px;
+    }
+    .svc-icon-wrap{
+        width:56px;height:56px;
+        background:rgba(26,74,138,.25);
+        border:1px solid rgba(26,74,138,.35);
+        border-radius:var(--r-sm);
+        display:flex;align-items:center;justify-content:center;
+        font-size:22px;color:#7da8e0;
+        flex-shrink:0;transition:var(--tr);
+    }
+    .svc-icon-wrap.gold-icon{
+        background:rgba(201,168,76,.12);
+        border-color:rgba(201,168,76,.3);
+        color:var(--gold);
+    }
+    .svc-icon-wrap.green-icon{
+        background:rgba(74,222,128,.1);
+        border-color:rgba(74,222,128,.25);
+        color:#4ade80;
+    }
+    .svc-card:hover .svc-icon-wrap{transform:scale(1.1);box-shadow:0 0 18px rgba(26,74,138,.3);}
+    .svc-card:hover .svc-icon-wrap.gold-icon{box-shadow:0 0 18px rgba(201,168,76,.25);}
+
+    .svc-head-text{flex:1;}
+    .svc-head-title{font-size:16px;font-weight:800;color:var(--text-p);margin-bottom:4px;}
+    .svc-head-badge{
+        font-size:10px;font-weight:700;letter-spacing:1.5px;
+        padding:3px 10px;border-radius:20px;
+        background:rgba(201,168,76,.1);
+        border:1px solid rgba(201,168,76,.25);
+        color:var(--gold);
+        display:inline-block;
+    }
+    .svc-head-badge.blue-badge{
+        background:rgba(26,74,138,.2);
+        border-color:rgba(26,74,138,.4);
+        color:#7da8e0;
+    }
+
+    .svc-card-body{padding:24px 26px;display:flex;flex-direction:column;gap:14px;}
+
+    .svc-item{
+        display:flex;align-items:flex-start;gap:12px;
+        padding:10px 14px;
+        background:rgba(255,255,255,.025);
+        border:1px solid rgba(255,255,255,.04);
+        border-radius:var(--r-sm);
+        transition:var(--tr);
+    }
+    .svc-item:hover{background:rgba(255,255,255,.045);border-color:rgba(201,168,76,.1);}
+    .svc-item-icon{
+        width:32px;height:32px;
+        border-radius:6px;
+        display:flex;align-items:center;justify-content:center;
+        font-size:13px;flex-shrink:0;
+    }
+    .svc-item-icon.ci{ background:rgba(26,74,138,.2);color:#7da8e0; border:1px solid rgba(26,74,138,.2);}
+    .svc-item-icon.gi{ background:rgba(201,168,76,.1);color:var(--gold); border:1px solid rgba(201,168,76,.2);}
+    .svc-item-icon.ni{ background:rgba(74,222,128,.08);color:#4ade80; border:1px solid rgba(74,222,128,.15);}
+
+    .svc-item-text{display:flex;flex-direction:column;gap:2px;flex:1;}
+    .svc-item-label{font-size:13px;font-weight:700;color:var(--text-p);}
+    .svc-item-desc{font-size:11.5px;color:var(--text-s);line-height:1.5;}
+
+    .svc-item-qty{
+        font-size:11px;font-weight:700;
+        background:rgba(201,168,76,.1);
+        border:1px solid rgba(201,168,76,.25);
+        color:var(--gold);
+        padding:3px 10px;border-radius:20px;
+        flex-shrink:0;white-space:nowrap;
+    }
+    .svc-item-qty.blue-qty{
+        background:rgba(26,74,138,.15);
+        border-color:rgba(26,74,138,.3);
+        color:#7da8e0;
+    }
+
+    /* extras row */
+    .svc-extras{
+        display:flex;gap:10px;flex-wrap:wrap;
+        padding:14px 16px;
+        background:rgba(201,168,76,.04);
+        border:1px dashed rgba(201,168,76,.18);
+        border-radius:var(--r-sm);
+        margin-top:4px;
+    }
+    .svc-extra-tag{
+        font-size:11px;
+        padding:4px 12px;
+        background:rgba(255,255,255,.04);
+        border:1px solid rgba(255,255,255,.07);
+        border-radius:20px;
+        color:var(--text-s);
+        display:flex;align-items:center;gap:6px;
+    }
+    .svc-extra-tag i{font-size:10px;color:var(--gold);}
+
+    /* included note */
+    .svc-included{
+        display:flex;align-items:center;gap:8px;
+        font-size:11.5px;color:#4ade80;
+        padding:8px 14px;
+        background:rgba(74,222,128,.05);
+        border:1px solid rgba(74,222,128,.15);
+        border-radius:var(--r-sm);
+    }
+    .svc-included i{font-size:11px;}
+
+    /* MONTHLY BADGE */
+    .monthly-banner{
+        display:flex;align-items:center;gap:16px;justify-content:center;
+        background:linear-gradient(135deg,rgba(201,168,76,.1),rgba(26,74,138,.12));
+        border:1px solid var(--dark-border-s);
+        border-radius:var(--r-lg);
+        padding:20px 32px;
+        flex-wrap:wrap;
+    }
+    .mb-icon{
+        width:48px;height:48px;border-radius:50%;
+        background:rgba(201,168,76,.15);
+        border:1px solid rgba(201,168,76,.35);
+        display:flex;align-items:center;justify-content:center;
+        font-size:20px;color:var(--gold);
+        flex-shrink:0;
+    }
+    .mb-text{display:flex;flex-direction:column;gap:3px;}
+    .mb-title{font-size:15px;font-weight:800;color:var(--text-p);}
+    .mb-sub{font-size:12px;color:var(--text-s);}
+    .mb-divider{width:1px;height:44px;background:linear-gradient(180deg,transparent,var(--dark-border-s),transparent);}
+    .mb-pill{
+        background:var(--gold-grad);
+        color:#1a1000;
+        font-size:12px;font-weight:800;
+        padding:8px 22px;border-radius:30px;
+        letter-spacing:1px;
+        box-shadow:0 4px 16px rgba(201,168,76,.3);
+    }
+
+
+    /* =====================================================
+       PAGE 3 — PRICING + TERMS + CONTACT
+    ===================================================== */
+    #page3{
+        background:linear-gradient(170deg,#08111f 0%,#050c18 60%,#08111f 100%);
+        padding:70px 0 50px;
+    }
+    #page3::before{
+        content:'';position:absolute;inset:0;
+        background:radial-gradient(ellipse at 50% 100%,rgba(201,168,76,.08) 0%,transparent 55%);
+        pointer-events:none;
+    }
+
+    .p3-container{
+        max-width:900px;margin:0 auto;padding:0 36px;
+        position:relative;z-index:1;
+        display:flex;flex-direction:column;gap:44px;
+    }
+
+    /* ---- PRICING TABLE ---- */
+    .ptable{
+        background:var(--dark-card);
+        border:1px solid var(--dark-border);
+        border-radius:var(--r-xl);
+        overflow:hidden;
+        box-shadow:0 12px 50px rgba(0,0,0,.4);
+    }
+    .ptable-head{
+        display:grid;
+        grid-template-columns:1fr 140px 130px;
+        padding:14px 28px;
+        background:linear-gradient(90deg,rgba(26,74,138,.25),rgba(201,168,76,.08));
+        font-size:10.5px;font-weight:700;letter-spacing:2.5px;
+        color:var(--text-m);text-transform:uppercase;
+        border-bottom:1px solid var(--dark-border);
+        gap:12px;
+    }
+    .ptable-head .ph-right{text-align:left;}
+    .ptable-row{
+        display:grid;
+        grid-template-columns:1fr 140px 130px;
+        padding:22px 28px;
+        border-bottom:1px solid var(--dark-border);
+        align-items:center;gap:12px;
+        transition:background .3s ease;
+    }
+    .ptable-row:last-child{border-bottom:none;}
+    .ptable-row:not(.total-row):hover{background:rgba(255,255,255,.025);}
+
+    .pr-service{display:flex;align-items:center;gap:16px;}
+    .pr-svc-icon{
+        width:44px;height:44px;border-radius:var(--r-sm);
+        display:flex;align-items:center;justify-content:center;
+        font-size:17px;flex-shrink:0;
+        transition:var(--tr);
+    }
+    .pr-svc-icon.ic1{background:rgba(26,74,138,.2);color:#7da8e0;border:1px solid rgba(26,74,138,.25);}
+    .pr-svc-icon.ic2{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid rgba(201,168,76,.25);}
+    .pr-svc-icon.ic3{background:rgba(74,222,128,.08);color:#4ade80;border:1px solid rgba(74,222,128,.18);}
+    .pr-svc-icon.ic4{background:rgba(201,168,76,.2);color:var(--gold-l);border:1px solid rgba(201,168,76,.4);box-shadow:0 0 14px rgba(201,168,76,.18);}
+
+    .ptable-row:hover .pr-svc-icon{transform:scale(1.08);}
+
+    .pr-svc-info{display:flex;flex-direction:column;gap:3px;}
+    .pr-svc-name{font-size:14px;font-weight:700;color:var(--text-p);}
+    .pr-svc-sub{font-size:11.5px;color:var(--text-s);}
+
+    .pr-qty{
+        font-size:12px;color:var(--text-s);
+        display:flex;align-items:center;gap:6px;
+    }
+    .pr-qty i{color:var(--text-m);font-size:10px;}
+
+    .pr-price{text-align:left;display:flex;align-items:baseline;gap:5px;justify-content:flex-end;}
+    .pr-num{font-size:24px;font-weight:900;color:var(--text-p);line-height:1;}
+    .pr-cur{font-size:12px;color:var(--text-m);font-weight:500;}
+
+    /* total row */
+    .total-row{
+        background:linear-gradient(135deg,rgba(201,168,76,.12),rgba(201,168,76,.04)) !important;
+        border-top:1px solid rgba(201,168,76,.3) !important;
+    }
+    .total-label{font-size:13px;font-weight:700;color:var(--gold);display:flex;align-items:center;gap:7px;}
+    .total-label i{color:#4ade80;}
+    .total-num{
+        font-size:36px !important;
+        background:var(--gold-grad);
+        -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+        background-clip:text;
+        filter:drop-shadow(0 0 12px rgba(201,168,76,.4));
+    }
+    .total-cur{font-size:14px !important;color:var(--gold) !important;font-weight:700 !important;}
+
+    .ptable-note{
+        display:flex;align-items:center;gap:10px;
+        background:rgba(201,168,76,.05);
+        border:1px solid rgba(201,168,76,.15);
+        border-radius:var(--r-sm);
+        padding:13px 18px;
+        margin:16px 16px 0;
+        font-size:12.5px;color:var(--text-s);
+    }
+    .ptable-note i{color:var(--gold);flex-shrink:0;}
+
+    /* ---- TERMS ---- */
+    .terms-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+        gap:20px;
+    }
+    .term-card{
+        background:var(--dark-card);
+        border:1px solid var(--dark-border);
+        border-radius:var(--r-lg);
+        padding:24px 22px;
+        display:flex;flex-direction:column;gap:14px;
+        transition:var(--tr);
+    }
+    .term-card:hover{
+        border-color:var(--dark-border-s);
+        transform:translateY(-4px);
+        box-shadow:0 10px 30px rgba(0,0,0,.3),0 0 18px rgba(201,168,76,.08);
+    }
+    .term-icon{
+        width:46px;height:46px;border-radius:var(--r-sm);
+        display:flex;align-items:center;justify-content:center;
+        font-size:18px;
+    }
+    .ti1{background:rgba(201,168,76,.12);color:var(--gold);border:1px solid rgba(201,168,76,.25);}
+    .ti2{background:rgba(74,222,128,.08);color:#4ade80;border:1px solid rgba(74,222,128,.18);}
+    .ti3{background:rgba(26,74,138,.2);color:#7da8e0;border:1px solid rgba(26,74,138,.3);}
+    .ti4{background:rgba(251,191,36,.1);color:#fbbf24;border:1px solid rgba(251,191,36,.2);}
+
+    .term-title{font-size:14px;font-weight:700;color:var(--text-p);}
+    .term-desc{font-size:12.5px;color:var(--text-s);line-height:1.7;}
+
+    /* ---- CONTACT ---- */
+    .contact-wrap{
+        background:var(--dark-card);
+        border:1px solid var(--dark-border-s);
+        border-radius:var(--r-xl);
+        padding:36px;
+        position:relative;overflow:hidden;
+        box-shadow:0 12px 50px rgba(0,0,0,.35),0 0 50px rgba(201,168,76,.06);
+    }
+    .contact-wrap::before{
+        content:'';
+        position:absolute;top:0;left:0;right:0;height:3px;
+        background:var(--gold-grad);
+    }
+
+    .cw-person{
+        display:flex;align-items:center;gap:20px;
+        padding-bottom:24px;margin-bottom:24px;
+        border-bottom:1px solid var(--dark-border);
+    }
+    .cw-avatar{
+        position:relative;flex-shrink:0;
+    }
+    .cw-av-inner{
+        width:68px;height:68px;border-radius:50%;
+        background:linear-gradient(135deg,rgba(201,168,76,.22),rgba(201,168,76,.06));
+        border:2px solid rgba(201,168,76,.35);
+        display:flex;align-items:center;justify-content:center;
+        font-size:28px;color:var(--gold);
+    }
+    .cw-av-ring{
+        position:absolute;inset:-5px;border-radius:50%;
+        border:1px dashed rgba(201,168,76,.25);
+        animation:spin 12s linear infinite;
+    }
+    .cw-online{
+        position:absolute;bottom:2px;left:2px;
+        width:13px;height:13px;background:#4ade80;
+        border-radius:50%;border:2px solid var(--dark-card);
+        animation:pdot 2s infinite;
+    }
+    .cw-name{font-size:18px;font-weight:800;color:var(--text-p);}
+    .cw-role{font-size:12.5px;color:var(--text-s);}
+
+    .cw-items{display:flex;flex-direction:column;gap:12px;margin-bottom:24px;}
+    .cw-item{
+        display:flex;align-items:center;gap:14px;
+        background:rgba(255,255,255,.025);
+        border:1px solid var(--dark-border);
+        border-radius:var(--r-md);
+        padding:14px 18px;
+        transition:var(--tr);
+        cursor:pointer;
+    }
+    .cw-item:hover{background:rgba(255,255,255,.05);border-color:var(--dark-border-s);transform:translateX(-4px);}
+    .cw-item-icon{
+        width:42px;height:42px;border-radius:var(--r-sm);
+        display:flex;align-items:center;justify-content:center;
+        font-size:17px;flex-shrink:0;transition:var(--tr);
+    }
+    .cii1{background:rgba(26,74,138,.2);color:#7da8e0;border:1px solid rgba(26,74,138,.25);}
+    .cii2{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.25);}
+    .cw-item:hover .cw-item-icon{transform:scale(1.08);}
+    .cw-item-text{flex:1;display:flex;flex-direction:column;gap:2px;}
+    .cw-item-label{font-size:10.5px;color:var(--text-m);font-weight:700;letter-spacing:1px;}
+    .cw-item-val{font-size:13.5px;color:var(--text-p);font-weight:500;}
+    .cw-item-arrow{font-size:10px;color:var(--text-m);transition:var(--tr);}
+    .cw-item:hover .cw-item-arrow{color:var(--gold);transform:translateX(-3px);}
+
+    .cw-btns{display:flex;gap:12px;flex-wrap:wrap;}
+    .btn-gold{
+        flex:1;min-width:140px;
+        display:flex;align-items:center;justify-content:center;gap:10px;
+        background:var(--gold-grad);color:#1a1000;
+        padding:13px 24px;border-radius:30px;
+        font-size:13px;font-weight:800;font-family:var(--font);
+        border:none;cursor:pointer;transition:var(--tr);
+        box-shadow:0 6px 20px rgba(201,168,76,.3);
+    }
+    .btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(201,168,76,.4);}
+    .btn-outline{
+        flex:1;min-width:140px;
+        display:flex;align-items:center;justify-content:center;gap:10px;
+        background:transparent;color:var(--gold);
+        border:1px solid rgba(201,168,76,.4);
+        padding:13px 24px;border-radius:30px;
+        font-size:13px;font-weight:600;font-family:var(--font);
+        cursor:pointer;transition:var(--tr);
+    }
+    .btn-outline:hover{background:rgba(201,168,76,.1);border-color:var(--gold);transform:translateY(-2px);}
+
+    /* ---- FOOTER ROW ---- */
+    .p3-footer{
+        display:flex;align-items:center;justify-content:space-between;
+        flex-wrap:wrap;gap:12px;
+        padding:0 4px;
+    }
+    .p3f-copy{font-size:11px;color:var(--text-m);}
+    .p3f-ref{
+        font-size:11px;color:var(--gold);
+        letter-spacing:2px;font-weight:700;
+        background:rgba(201,168,76,.07);
+        border:1px solid rgba(201,168,76,.2);
+        padding:4px 14px;border-radius:20px;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+    @media(max-width:768px){
+        .cover-topbar,.cover-bottom{padding:20px 24px;}
+        .cover-client-box{flex-direction:column;gap:12px;padding:18px 24px;}
+        .ccb-divider{display:none;}
+        .cover-body{padding:0 20px;}
+        .p2-container,.p3-container{padding:0 20px;}
+        .ptable-head,.ptable-row{grid-template-columns:1fr 90px;}
+        .ptable-head .ph-mid,.ptable-row .pr-qty{display:none;}
+        .terms-grid{grid-template-columns:1fr;}
+        .contact-wrap{padding:24px 20px;}
+        .cover-meta-row{gap:14px;}
+        .cmr-sep{display:none;}
+        .monthly-banner{flex-direction:column;text-align:center;}
+        .mb-divider{display:none;}
+        .cw-btns{flex-direction:column;}
+        .btn-gold,.btn-outline{flex:unset;width:100%;}
+        .page-nav{display:none;}
+        .p3-footer{flex-direction:column;align-items:center;}
+    }
+    @media(max-width:480px){
+        .services-grid{grid-template-columns:1fr;}
+        .ptable-head,.ptable-row{grid-template-columns:1fr 90px;}
+        .cover-center-logo{width:110px;height:110px;}
+        .ccl-inner{width:80px;height:80px;}
+        .ccl-icon{font-size:22px;}
+    }
+    </style>
+</head>
+<body>
+
+<!-- Scroll progress -->
+<div id="scroll-progress"></div>
+
+<!-- Page Nav Dots -->
+<nav class="page-nav" aria-label="التنقل بين الصفحات">
+    <div class="page-nav-dot active" data-target="page1" title="صفحة الغلاف"></div>
+    <div class="page-nav-dot" data-target="page2" title="تفاصيل الخدمات"></div>
+    <div class="page-nav-dot" data-target="page3" title="التسعير والتواصل"></div>
+</nav>
+
+
+<!-- =====================================================
+     PAGE 1 — COVER
+===================================================== -->
+<section class="page" id="page1">
+
+    <!-- Top Bar -->
+    <div class="cover-topbar reveal">
+        <div class="cover-brand">
+            <div class="cover-logo-ring">AR</div>
+            <div class="cover-brand-text">
+                <span class="cover-brand-name">عبدالله الربيعي</span>
+                <span class="cover-brand-sub">خدمات التسويق الرقمي</span>
+            </div>
+        </div>
+        <div class="cover-doc-info">
+            <span class="cover-doc-ref">QT-2026-04</span>
+            <span class="cover-doc-date" id="doc-date">أبريل 2026</span>
+        </div>
+    </div>
+
+    <div class="gold-line"></div>
+
+    <!-- Hero Body -->
+    <div class="cover-body">
+
+        <div class="cover-badge reveal">
+            <div class="badge-pulse"></div>
+            <span>عرض سعر شهري متجدد · Monthly Quotation</span>
+        </div>
+
+        <div class="cover-center-logo reveal">
+            <div class="ccl-outer"></div>
+            <div class="ccl-mid"></div>
+            <div class="ccl-inner">
+                <i class="fas fa-layer-group ccl-icon"></i>
+                <span class="ccl-sub">Digital</span>
+            </div>
+        </div>
+
+        <div class="cover-headline reveal">
+            <span class="ch-eyebrow">عرض سعر احترافي</span>
+            <h1 class="ch-main">خدمات رقمية</h1>
+            <p class="ch-sub">إنتاج مرئي · تصميم جرافيك · إدارة هوية رقمية</p>
+        </div>
+
+        <div class="cover-client-box reveal">
+            <div class="ccb-right">
+                <span class="ccb-label">مُقدَّم إلى</span>
+                <span class="ccb-name">GIS HUB</span>
+                <span class="ccb-type">خدمة شهرية متجددة</span>
+            </div>
+            <div class="ccb-divider"></div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-s);">
+                    <i class="fas fa-calendar-check" style="color:var(--gold);font-size:11px;"></i>
+                    <span>التجديد: شهري تلقائي</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-s);">
+                    <i class="fas fa-file-invoice" style="color:var(--gold);font-size:11px;"></i>
+                    <span>الفوترة: نهاية كل شهر</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-s);">
+                    <i class="fas fa-check-circle" style="color:#4ade80;font-size:11px;"></i>
+                    <span>المحتوى جاهز للتنفيذ</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="cover-meta-row reveal">
+            <div class="cmr-item"><i class="fas fa-user-tie"></i><span>عبدالله عبدالرحمن الربيعي</span></div>
+            <span class="cmr-sep">|</span>
+            <div class="cmr-item"><i class="fas fa-phone-alt"></i><span dir="ltr">79353500</span></div>
+            <span class="cmr-sep">|</span>
+            <div class="cmr-item"><i class="fas fa-coins"></i><span>الإجمالي الشهري: 210 ر.ع</span></div>
+        </div>
+
+    </div>
+
+    <div class="gold-line"></div>
+
+    <!-- Bottom Bar -->
+    <div class="cover-bottom reveal">
+        <span class="cb-page-label">الصفحة 01 من 03</span>
+        <div class="cb-scroll">
+            <span>تفاصيل الخدمات</span>
+            <div class="cb-arrow"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <span class="cb-page-label" style="opacity:0;">spacer</span>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PAGE 2 — SERVICES
+===================================================== -->
+<section class="page" id="page2">
+    <div class="gold-line"></div>
+    <div class="p2-container">
+
+        <div class="sec-label reveal">
+            <span class="sec-num">02 · SERVICES</span>
+            <h2 class="sec-title">تفاصيل الخدمات الشهرية</h2>
+            <div class="sec-line"></div>
+            <p class="sec-desc">باقة متكاملة من الخدمات الرقمية المتجددة شهرياً</p>
+        </div>
+
+        <div class="services-grid">
+
+            <!-- CARD 1: VIDEO REELS -->
+            <div class="svc-card reveal" data-delay="0">
+                <div class="svc-card-head">
+                    <div class="svc-icon-wrap gold-icon">
+                        <i class="fas fa-film"></i>
+                    </div>
+                    <div class="svc-head-text">
+                        <div class="svc-head-title">إنتاج مقاطع الريلز</div>
+                        <span class="svc-head-badge">Video Production</span>
+                    </div>
+                </div>
+                <div class="svc-card-body">
+                    <div class="svc-item">
+                        <div class="svc-item-icon gi"><i class="fas fa-video"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">ريلز إنتاجي شهري</span>
+                            <span class="svc-item-desc">مقطع مصور أو موشن جرافيك · مدة 20 - 30 ثانية</span>
+                        </div>
+                        <span class="svc-item-qty">1 / شهر</span>
+                    </div>
+                    <div class="svc-item">
+                        <div class="svc-item-icon gi"><i class="fas fa-cut"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">مونتاج ومعالجة بصرية</span>
+                            <span class="svc-item-desc">تحرير احترافي مع مؤثرات صوتية وبصرية</span>
+                        </div>
+                    </div>
+                    <div class="svc-item">
+                        <div class="svc-item-icon gi"><i class="fas fa-photo-video"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">بوستان احتياطيان</span>
+                            <span class="svc-item-desc">محتوى إضافي جاهز لأي ظرف أو حدث طارئ</span>
+                        </div>
+                        <span class="svc-item-qty">+2 احتياط</span>
+                    </div>
+                    <div class="svc-extras">
+                        <span class="svc-extra-tag"><i class="fas fa-check"></i>صيغة مناسبة للمنصات</span>
+                        <span class="svc-extra-tag"><i class="fas fa-check"></i>تحسين الجودة</span>
+                        <span class="svc-extra-tag"><i class="fas fa-check"></i>تعليق صوتي إن لزم</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 2: POSTS (FEATURED) -->
+            <div class="svc-card featured reveal" data-delay="120">
+                <div class="svc-card-head">
+                    <div class="svc-icon-wrap">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <div class="svc-head-text">
+                        <div class="svc-head-title">البوسترات الشهرية</div>
+                        <span class="svc-head-badge blue-badge">Social Media Posts</span>
+                    </div>
+                </div>
+                <div class="svc-card-body">
+                    <div class="svc-item">
+                        <div class="svc-item-icon ci"><i class="fas fa-image"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">بوست مفرد (Single Post)</span>
+                            <span class="svc-item-desc">تصميم بصري فردي يناسب هوية الجهة</span>
+                        </div>
+                        <span class="svc-item-qty blue-qty">متغير</span>
+                    </div>
+                    <div class="svc-item">
+                        <div class="svc-item-icon ci"><i class="fas fa-th"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">بوست كاروسيل (Carousel)</span>
+                            <span class="svc-item-desc">سلسلة صور متعددة لقصة بصرية متكاملة</span>
+                        </div>
+                        <span class="svc-item-qty blue-qty">متغير</span>
+                    </div>
+                    <div class="svc-item">
+                        <div class="svc-item-icon ci"><i class="fas fa-draw-polygon"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">قطعة جرافيك متخصصة</span>
+                            <span class="svc-item-desc">تصميم جرافيكي مستقل لمناسبات أو إعلانات</span>
+                        </div>
+                        <span class="svc-item-qty blue-qty">1 قطعة</span>
+                    </div>
+                    <div class="svc-included">
+                        <i class="fas fa-check-circle"></i>
+                        <span>إجمالي البوسترات: <strong>4 بوستات</strong> (مفرد + كاروسيل) + 1 جرافيك + 2 احتياط</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD 3: PROFILE MANAGEMENT -->
+            <div class="svc-card reveal" data-delay="240">
+                <div class="svc-card-head">
+                    <div class="svc-icon-wrap green-icon">
+                        <i class="fas fa-user-edit"></i>
+                    </div>
+                    <div class="svc-head-text">
+                        <div class="svc-head-title">إدارة الهوية الرقمية</div>
+                        <span class="svc-head-badge">Profile Management</span>
+                    </div>
+                </div>
+                <div class="svc-card-body">
+                    <div class="svc-item">
+                        <div class="svc-item-icon ni"><i class="fas fa-id-card"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">تحديث الملفات الشخصية</span>
+                            <span class="svc-item-desc">مراجعة وتحسين البايو والصور والبيانات</span>
+                        </div>
+                    </div>
+                    <div class="svc-item">
+                        <div class="svc-item-icon ni"><i class="fas fa-paint-brush"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">تناسق الهوية البصرية</span>
+                            <span class="svc-item-desc">ضمان توحد الألوان والأسلوب البصري عبر المنصات</span>
+                        </div>
+                    </div>
+                    <div class="svc-item">
+                        <div class="svc-item-icon ni"><i class="fas fa-sync-alt"></i></div>
+                        <div class="svc-item-text">
+                            <span class="svc-item-label">تعديلات دورية شهرية</span>
+                            <span class="svc-item-desc">تحديث ما يلزم بحسب المستجدات والأحداث</span>
+                        </div>
+                    </div>
+                    <div class="svc-extras">
+                        <span class="svc-extra-tag"><i class="fas fa-check"></i>Instagram</span>
+                        <span class="svc-extra-tag"><i class="fas fa-check"></i>LinkedIn</span>
+                        <span class="svc-extra-tag"><i class="fas fa-check"></i>X / Twitter</span>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /services-grid -->
+
+        <!-- Monthly Banner -->
+        <div class="monthly-banner reveal">
+            <div class="mb-icon"><i class="fas fa-sync-alt"></i></div>
+            <div class="mb-text">
+                <span class="mb-title">خدمة شهرية متجددة</span>
+                <span class="mb-sub">يُجدَّد العقد تلقائياً كل شهر · التسديد في نهاية كل دورة شهرية</span>
+            </div>
+            <div class="mb-divider"></div>
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px;">
+                <div class="mb-pill">الإجمالي الشهري: 210 ر.ع</div>
+                <span style="font-size:11px;color:var(--text-m);">تُصدَر فاتورة تفصيلية مع كل دفعة</span>
+            </div>
+        </div>
+
+    </div>
+    <div class="gold-line" style="margin-top:auto;"></div>
+
+    <!-- page label -->
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 36px;">
+        <span style="font-size:11px;color:var(--text-m);letter-spacing:3px;">الصفحة 02 من 03</span>
+        <div style="display:flex;align-items:center;gap:8px;font-size:11px;color:var(--text-m);letter-spacing:2px;">
+            <span>التسعير والشروط</span>
+            <div class="cb-arrow" style="width:26px;height:26px;font-size:10px;"><i class="fas fa-chevron-down"></i></div>
+        </div>
+        <span style="font-size:11px;color:transparent;">spacer</span>
+    </div>
+</section>
+
+
+<!-- =====================================================
+     PAGE 3 — PRICING + TERMS + CONTACT
+===================================================== -->
+<section class="page" id="page3">
+    <div class="gold-line"></div>
+
+    <div class="p3-container">
+
+        <!-- SECTION LABEL -->
+        <div class="sec-label reveal">
+            <span class="sec-num">03 · PRICING & TERMS</span>
+            <h2 class="sec-title">التسعير والشروط والتواصل</h2>
+            <div class="sec-line"></div>
+        </div>
+
+        <!-- PRICING TABLE -->
+        <div class="reveal">
+            <div class="ptable">
+                <div class="ptable-head">
+                    <div>الخدمة</div>
+                    <div class="ph-mid">التفاصيل</div>
+                    <div class="ph-right">السعر/شهر</div>
+                </div>
+
+                <!-- Row 1 -->
+                <div class="ptable-row reveal" data-delay="50">
+                    <div class="pr-service">
+                        <div class="pr-svc-icon ic1"><i class="fas fa-film"></i></div>
+                        <div class="pr-svc-info">
+                            <span class="pr-svc-name">إنتاج مقاطع الريلز</span>
+                            <span class="pr-svc-sub">ريلز + مونتاج + 2 بوست احتياط</span>
+                        </div>
+                    </div>
+                    <div class="pr-qty"><i class="fas fa-clock"></i>20-30 ثانية</div>
+                    <div class="pr-price">
+                        <span class="pr-num">65</span>
+                        <span class="pr-cur">ر.ع</span>
+                    </div>
+                </div>
+
+                <!-- Row 2 -->
+                <div class="ptable-row reveal" data-delay="120">
+                    <div class="pr-service">
+                        <div class="pr-svc-icon ic2"><i class="fas fa-images"></i></div>
+                        <div class="pr-svc-info">
+                            <span class="pr-svc-name">البوسترات الشهرية</span>
+                            <span class="pr-svc-sub">4 بوستات + 1 جرافيك + 2 احتياط</span>
+                        </div>
+                    </div>
+                    <div class="pr-qty"><i class="fas fa-layer-group"></i>7 قطع</div>
+                    <div class="pr-price">
+                        <span class="pr-num">110</span>
+                        <span class="pr-cur">ر.ع</span>
+                    </div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="ptable-row reveal" data-delay="190">
+                    <div class="pr-service">
+                        <div class="pr-svc-icon ic3"><i class="fas fa-user-edit"></i></div>
+                        <div class="pr-svc-info">
+                            <span class="pr-svc-name">إدارة الهوية الرقمية</span>
+                            <span class="pr-svc-sub">تحديث البروفايلات + توحيد الهوية</span>
+                        </div>
+                    </div>
+                    <div class="pr-qty"><i class="fas fa-sync-alt"></i>شهري</div>
+                    <div class="pr-price">
+                        <span class="pr-num">35</span>
+                        <span class="pr-cur">ر.ع</span>
+                    </div>
+                </div>
+
+                <!-- TOTAL -->
+                <div class="ptable-row total-row reveal" data-delay="260">
+                    <div class="pr-service">
+                        <div class="pr-svc-icon ic4"><i class="fas fa-gem"></i></div>
+                        <div class="pr-svc-info">
+                            <span class="pr-svc-name" style="font-size:15px;font-weight:800;">الإجمالي الشهري</span>
+                            <span class="pr-svc-sub">جميع الخدمات مجتمعةً</span>
+                        </div>
+                    </div>
+                    <div class="total-label"><i class="fas fa-check-circle"></i>الإجمالي</div>
+                    <div class="pr-price">
+                        <span class="pr-num total-num">210</span>
+                        <span class="pr-cur total-cur">ر.ع</span>
+                    </div>
+                </div>
+
+            </div><!-- /ptable -->
+
+            <div class="ptable-note">
+                <i class="fas fa-info-circle"></i>
+                <span>تُصدَر <strong>فاتورة تفصيلية دقيقة</strong> في نهاية كل شهر توضح كل خدمة على حدة · المحتوى مُقدَّم من الجهة جاهزاً للتنفيذ</span>
+            </div>
+        </div>
+
+        <!-- TERMS -->
+        <div>
+            <div class="sec-label reveal" style="margin-bottom:24px;">
+                <span class="sec-num">الشروط والأحكام</span>
+                <div class="sec-line"></div>
+            </div>
+            <div class="terms-grid">
+                <div class="term-card reveal" data-delay="0">
+                    <div class="term-icon ti1"><i class="fas fa-calendar-alt"></i></div>
+                    <div class="term-title">دورة الخدمة</div>
+                    <div class="term-desc">تُحتسب الخدمة شهرياً وتتجدد تلقائياً في مطلع كل شهر ميلادي جديد</div>
+                </div>
+                <div class="term-card reveal" data-delay="80">
+                    <div class="term-icon ti2"><i class="fas fa-file-invoice-dollar"></i></div>
+                    <div class="term-title">موعد السداد</div>
+                    <div class="term-desc">يتم التسديد في <strong>نهاية كل شهر</strong> بعد الانتهاء من تسليم جميع المحتوى المتفق عليه</div>
+                </div>
+                <div class="term-card reveal" data-delay="160">
+                    <div class="term-icon ti3"><i class="fas fa-box-open"></i></div>
+                    <div class="term-title">المحتوى والتسليم</div>
+                    <div class="term-desc">يُقدَّم المحتوى جاهزاً من الجهة المستفيدة · دور مزود الخدمة التصميم والإنتاج فقط</div>
+                </div>
+                <div class="term-card reveal" data-delay="240">
+                    <div class="term-icon ti4"><i class="fas fa-edit"></i></div>
+                    <div class="term-title">التعديلات</div>
+                    <div class="term-desc">يُتاح <strong>تعديلان</strong> لكل قطعة · تعديلات إضافية تُحتسب بشكل منفصل بحسب الاتفاق</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT -->
+        <div>
+            <div class="sec-label reveal" style="margin-bottom:24px;">
+                <span class="sec-num">للتواصل</span>
+                <div class="sec-line"></div>
+            </div>
+            <div class="contact-wrap reveal">
+                <div class="cw-person">
+                    <div class="cw-avatar">
+                        <div class="cw-av-inner"><i class="fas fa-user-circle"></i></div>
+                        <div class="cw-av-ring"></div>
+                        <div class="cw-online"></div>
+                    </div>
+                    <div>
+                        <div class="cw-name">عبدالله عبدالرحمن الربيعي</div>
+                        <div class="cw-role">مزود خدمات التسويق الرقمي والإنتاج المرئي</div>
+                    </div>
+                </div>
+
+                <div class="cw-items">
+                    <a href="tel:79353500" class="cw-item">
+                        <div class="cw-item-icon cii1"><i class="fas fa-phone-alt"></i></div>
+                        <div class="cw-item-text">
+                            <span class="cw-item-label">الهاتف</span>
+                            <span class="cw-item-val" dir="ltr">79353500</span>
+                        </div>
+                        <i class="fas fa-external-link-alt cw-item-arrow"></i>
+                    </a>
+                    <a href="mailto:3lrubaiai@gmail.com" class="cw-item">
+                        <div class="cw-item-icon cii2"><i class="fas fa-envelope"></i></div>
+                        <div class="cw-item-text">
+                            <span class="cw-item-label">البريد الإلكتروني</span>
+                            <span class="cw-item-val" dir="ltr">3lrubaiai@gmail.com</span>
+                        </div>
+                        <i class="fas fa-external-link-alt cw-item-arrow"></i>
+                    </a>
+                </div>
+
+                <div class="cw-btns">
+                    <a href="mailto:3lrubaiai@gmail.com" class="btn-gold">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>قبول العرض وإرسال موافقة</span>
+                    </a>
+                    <a href="tel:79353500" class="btn-outline">
+                        <i class="fas fa-phone-alt"></i>
+                        <span>التواصل الفوري</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer Row -->
+        <div class="p3-footer reveal">
+            <span class="p3f-copy">© 2026 عبدالله عبدالرحمن الربيعي · جميع الحقوق محفوظة</span>
+            <span class="p3f-ref">QT-2026-04 · الصفحة 03/03</span>
+        </div>
+
+    </div><!-- /p3-container -->
+    <div class="gold-line" style="margin-top:auto;"></div>
+
+</section>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- Set current date ---
+    const months = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+    const now = new Date();
+    document.getElementById('doc-date').textContent = `${months[now.getMonth()]} ${now.getFullYear()}`;
+
+    // --- Scroll progress ---
+    const bar = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+        const pct = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight) * 100;
+        bar.style.width = Math.min(pct, 100) + '%';
+    });
+
+    // --- Reveal on scroll ---
+    const revealObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                const delay = parseInt(e.target.dataset.delay || 0);
+                setTimeout(() => e.target.classList.add('vis'), delay);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+    // Trigger page1 immediately
+    setTimeout(() => {
+        document.querySelectorAll('#page1 .reveal').forEach((el, i) => {
+            setTimeout(() => el.classList.add('vis'), i * 140);
+        });
+    }, 80);
+
+    // --- Page Nav Dots ---
+    const pages = ['page1', 'page2', 'page3'];
+    const dots = document.querySelectorAll('.page-nav-dot');
+
+    const pageObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting && e.intersectionRatio > 0.4) {
+                const id = e.target.id;
+                dots.forEach(d => d.classList.remove('active'));
+                const idx = pages.indexOf(id);
+                if (idx >= 0) dots[idx].classList.add('active');
+            }
+        });
+    }, { threshold: 0.4 });
+
+    pages.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) pageObs.observe(el);
+    });
+
+    dots.forEach((dot, i) => {
+        dot.addEventListener('click', () => {
+            document.getElementById(pages[i])?.scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+
+    // --- Counter animation ---
+    function animCount(el, target, dur = 1200) {
+        let s = 0;
+        const step = target / (dur / 16);
+        const t = setInterval(() => {
+            s = Math.min(s + step, target);
+            el.textContent = Math.round(s);
+            if (s >= target) clearInterval(t);
+        }, 16);
+    }
+
+    const countObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting && !e.target.dataset.counted) {
+                e.target.dataset.counted = '1';
+                const val = parseInt(e.target.textContent);
+                if (!isNaN(val)) animCount(e.target, val);
+            }
+        });
+    }, { threshold: 0.6 });
+
+    document.querySelectorAll('.pr-num, .total-num').forEach(el => countObs.observe(el));
+
+    // --- 3D Tilt on cards ---
+    document.querySelectorAll('.svc-card').forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width;
+            const y = (e.clientY - r.top) / r.height;
+            card.style.transform = `translateY(-6px) perspective(800px) rotateX(${(y - .5) * 5}deg) rotateY(${(.5 - x) * 5}deg)`;
+        });
+        card.addEventListener('mouseleave', () => { card.style.transform = ''; });
+    });
+
+    // --- Floating particles ---
+    const hero = document.getElementById('page1');
+    function mkParticle() {
+        const p = document.createElement('div');
+        const sz = Math.random() * 3 + 1;
+        const isGold = Math.random() > .5;
+        const color = isGold
+            ? `rgba(201,168,76,${(Math.random()*.35+.08).toFixed(2)})`
+            : `rgba(100,160,220,${(Math.random()*.25+.05).toFixed(2)})`;
+        p.style.cssText = `
+            position:absolute;border-radius:50%;pointer-events:none;
+            width:${sz}px;height:${sz}px;background:${color};
+            left:${Math.random()*100}%;bottom:-10px;
+            animation:pfloat ${Math.random()*14+10}s linear ${Math.random()*8}s forwards;
+            box-shadow:0 0 ${sz*2}px ${color};
+        `;
+        hero.appendChild(p);
+        setTimeout(() => p.remove(), 24000);
+    }
+    const style = document.createElement('style');
+    style.textContent = `@keyframes pfloat{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:1}90%{opacity:.3}100%{transform:translateY(-110vh) rotate(360deg);opacity:0}}`;
+    document.head.appendChild(style);
+    for (let i = 0; i < 16; i++) setTimeout(mkParticle, i * 400);
+    setInterval(mkParticle, 900);
+
+    console.log('%c📄 GIS HUB Quotation · QT-2026-04', 'color:#c9a84c;font-size:14px;font-weight:bold;padding:6px;');
+});
+</script>
+
+</body>
+</html>
